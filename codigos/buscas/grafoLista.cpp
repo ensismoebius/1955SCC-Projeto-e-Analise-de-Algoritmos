@@ -1,6 +1,48 @@
 #include "grafo.h"
 #include <climits>
 #include <iostream>
+#include <queue>
+
+void buscaEmLargura(grafo* G, int item)
+{
+    // Cria fila vazia
+    std::queue<vertice*> fila;
+
+    std::cout << item << std::flush;
+
+    // Marca o primeiro como visitado
+    G->listaDeAdjacencias[item].visitado = true;
+
+    // Enfileira
+    fila.push(&G->listaDeAdjacencias[item]);
+
+    // Enquanto a fila nao esta vazia
+    while (!fila.empty()) {
+
+        // Desinfileira
+        auto u = fila.front();
+        fila.pop();
+
+        // Para todo vertice vizinho de u
+        auto vizinho = u->adjacente;
+        while (vizinho) {
+            if (G->listaDeAdjacencias[vizinho->rotulo].folha || vizinho->folha)
+                break;
+            if (!G->listaDeAdjacencias[vizinho->rotulo].visitado) {
+
+                // Marca como visitado
+                G->listaDeAdjacencias[vizinho->rotulo].visitado = true;
+
+                // Exibe
+                std::cout << " -> " << vizinho->rotulo << std::flush;
+
+                // Adiciona na fila
+                fila.push(&G->listaDeAdjacencias[vizinho->rotulo]);
+            }
+            vizinho = vizinho->adjacente;
+        }
+    }
+}
 
 grafo* criaGrafo(int vertices, int arestas)
 {
@@ -70,6 +112,11 @@ void adicionaAresta(grafo* G, int u, int v)
     ultimo->rotulo = u;
     ultimo->folha = false;
     ultimo->adjacente = novaFolha;
+}
+
+vertice* recuperaVizinhos(grafo* G, int u)
+{
+    return G->listaDeAdjacencias[u].adjacente;
 }
 
 void imprimeGrafo(grafo* G)

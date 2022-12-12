@@ -239,5 +239,19 @@ void rodaOrdenadores()
 int main()
 {
     // rodaOrdenadores();
-    rodarGrafo();
+    // rodarGrafo();
+    int n, m;
+    int u, v;
+    grafo* G;
+
+    scanf("%d %d", &n, &m);
+    G = criaGrafo(n, m);
+
+    while (m--) {
+        scanf("%d %d", &u, &v);
+        adicionaAresta(G, u, v);
+    }
+
+    imprimeGrafo(G);
+    buscaEmLargura(G, 0);
 }
